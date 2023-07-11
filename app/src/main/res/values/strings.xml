@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ChatBot</string>
+
+    <string name="google_token_id">638984744237-5s6tt3e6g12gh1uud3lrnvva35osnvje.apps.googleusercontent.com</string>
+    <string name="titleConfirmEmail">Email Confirmation</string>
+    <string name="messageConfirmEmail">Please enter to your email and confirm that are you.</string>
+
+</resources>
