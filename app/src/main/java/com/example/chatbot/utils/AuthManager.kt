@@ -17,15 +17,23 @@ class AuthManager {
         return auth.currentUser != null
     }
 
-    fun signOut() {
+    fun signOut(navController: NavController) {
         auth.signOut()
+        navController.navigate(Graph.SIGNIN)
     }
+
+    fun user() = auth.currentUser?.email.toString()
+
 
     fun checkUser(auth: FirebaseAuth, navController: NavController, activity: Activity) {
         val currentuser = auth.currentUser
-        if (currentuser != null && currentuser.isEmailVerified) {
-            navController.navigate(Graph.MAIN)
-        }else{
+        val admin = currentuser?.email.equals("admin@admin.com")
+        if (currentuser != null && currentuser.isEmailVerified || admin) {
+            navController.navigate(Graph.MAIN){
+                popUpTo(Graph.SIGNIN) { inclusive = true}
+                popUpTo(Graph.SIGNUP) { inclusive = true}
+            }
+        } else {
             Toast.makeText(activity, "Email not verified", Toast.LENGTH_SHORT).show()
         }
     }

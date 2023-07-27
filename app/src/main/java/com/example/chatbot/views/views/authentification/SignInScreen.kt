@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.chatbot.views.viewModel.authentification
+package com.example.chatbot.views.views.authentification
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -77,7 +80,9 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth().padding(top = 15.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -94,6 +99,9 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 value = email,
                 onValueChange = { email = it },
                 label = { Text("Email") },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Email, contentDescription = "Email" )
+                },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(1f)
@@ -105,6 +113,9 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 onValueChange = { password = it },
                 label = { Text("Password") },
                 singleLine = true,
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Lock, contentDescription = "Email" )
+                },
                 trailingIcon = {
                     IconButton(onClick = {
                         passwordVisibility = !passwordVisibility
@@ -146,7 +157,7 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Don't have account ?")
-                TextButton(onClick = { navController.navigate(Graph.SIGNUP) }) {
+                TextButton(onClick = { navController.navigate(Graph.SIGNUP)}) {
                     Text(text = "Sing Up")
                 }
             }

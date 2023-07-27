@@ -5,4 +5,5 @@ object Graph {
     const val SIGNUP = "signUp"
     const val MAIN = "main"
     const val DIALOGEMAILCONFIRMATION = "emailConfirmation"
+    const val SETTINGS = "settings"
 }

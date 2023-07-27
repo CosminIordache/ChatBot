@@ -45,12 +45,14 @@ fun EmailVerificationDialog(
     Dialog(onDismissRequest = { navController.navigate(Graph.SIGNUP) }) {
         Surface(
             shadowElevation = 8.dp,
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(16.dp), tonalElevation = 8.dp
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 IconButton(onClick = { navController.navigate(Graph.SIGNUP) }) {
                     Icon(
@@ -62,29 +64,24 @@ fun EmailVerificationDialog(
 
                 Spacer(modifier = Modifier.padding(top = 5.dp))
 
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(text = title, fontWeight = FontWeight.Bold, fontSize = 25.sp)
+                Text(text = title, fontWeight = FontWeight.Bold, fontSize = 25.sp)
 
-                    Spacer(modifier = Modifier.padding(top = 8.dp))
+                Spacer(modifier = Modifier.padding(top = 8.dp))
 
-                    Text(text = message)
+                Text(text = message)
 
-                    Spacer(modifier = Modifier.padding(top = 12.dp))
+                Spacer(modifier = Modifier.padding(top = 12.dp))
 
-                    Button(onClick = {
-                        authManager.onConfirmClick(
-                            auth,
-                            navController,
-                            activity
-                        )
-                    }) {
-                        Text(text = "Confirm")
-                    }
+                Button(onClick = {
+                    authManager.onConfirmClick(
+                        auth,
+                        navController,
+                        activity
+                    )
+                }) {
+                    Text(text = "Confirm")
                 }
+
             }
         }
     }

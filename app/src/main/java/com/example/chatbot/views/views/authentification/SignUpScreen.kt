@@ -1,7 +1,6 @@
-package com.example.chatbot.views.viewModel.authentification
+package com.example.chatbot.views.views.authentification
 
 import android.app.Activity
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,7 +40,6 @@ import androidx.navigation.NavHostController
 import com.example.chatbot.R
 import com.example.chatbot.model.Graph
 import com.example.chatbot.utils.AuthManager
-import com.example.chatbot.views.dialogs.EmailVerificationDialog
 import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,20 +49,6 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
     var password by rememberSaveable { mutableStateOf("") }
     var confirmPassword by rememberSaveable { mutableStateOf("") }
     val authManager = AuthManager()
-
-    var passwordVisibility by remember { mutableStateOf(false) }
-    var confirmPasswordVisibility by remember { mutableStateOf(false) }
-    val icon = if (passwordVisibility){
-        painterResource(id = R.drawable.baseline_visibility_24)
-    }else{
-        painterResource(id = R.drawable.baseline_visibility_off_24)
-    }
-
-    val iconConfirm = if (confirmPasswordVisibility){
-        painterResource(id = R.drawable.baseline_visibility_24)
-    }else{
-        painterResource(id = R.drawable.baseline_visibility_off_24)
-    }
 
     Column(
         modifier = Modifier
@@ -102,6 +89,9 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 value = email.value,
                 onValueChange = { email.value = it },
                 label = { Text("Email") },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Email, contentDescription = "Email" )
+                },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(1f)
@@ -112,18 +102,11 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Password") },
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(onClick = {
-                        passwordVisibility = !passwordVisibility
-                    }) {
-                        Icon(
-                            painter = icon,
-                            contentDescription = "Visibility"
-                        )
-                    }
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Lock, contentDescription = "Email" )
                 },
-                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(1f)
                     .padding(top = 5.dp, start = 25.dp, end = 25.dp)
@@ -132,19 +115,11 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
             OutlinedTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = { Text("Password") },
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(onClick = {
-                        confirmPasswordVisibility = !confirmPasswordVisibility
-                    }) {
-                        Icon(
-                            painter = iconConfirm,
-                            contentDescription = "Visibility"
-                        )
-                    }
+                label = { Text("Password") },leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Lock, contentDescription = "Email" )
                 },
-                visualTransformation = if (confirmPasswordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(1f)
                     .padding(top = 5.dp, start = 25.dp, end = 25.dp, bottom = 20.dp)
