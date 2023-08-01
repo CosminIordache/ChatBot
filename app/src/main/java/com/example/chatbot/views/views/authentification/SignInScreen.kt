@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.chatbot.R
 import com.example.chatbot.model.Graph
 import com.example.chatbot.utils.AuthManager
+import com.example.chatbot.utils.CloseAppInThisScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -60,6 +61,7 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
         painterResource(id = R.drawable.baseline_visibility_off_24)
     }
 
+    CloseAppInThisScreen()
 
     Column(
         modifier = Modifier
@@ -159,6 +161,16 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 Text(text = "Don't have account ?")
                 TextButton(onClick = { navController.navigate(Graph.SIGNUP)}) {
                     Text(text = "Sing Up")
+                }
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextButton(onClick = { navController.navigate(Graph.DIALOGRESETPASSWORD)}) {
+                    Text(text = "Don't remember your password ?")
                 }
             }
 

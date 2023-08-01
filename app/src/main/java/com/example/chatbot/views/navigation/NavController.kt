@@ -11,6 +11,7 @@ import com.example.chatbot.views.views.authentification.SignUpScreen
 import com.example.chatbot.model.Graph
 import com.example.chatbot.utils.AuthManager
 import com.example.chatbot.views.dialogs.EmailVerificationDialog
+import com.example.chatbot.views.dialogs.ResetPasswordDialog
 import com.example.chatbot.views.views.ChatView
 import com.example.chatbot.views.views.SettingsView
 import com.google.firebase.auth.ktx.auth
@@ -58,6 +59,14 @@ fun NavController(activity: Activity) {
                 activity = activity,
                 title = activity.getString(R.string.titleConfirmEmail),
                 message = activity.getString(R.string.messageConfirmEmail)
+            )
+        }
+
+        composable(Graph.DIALOGRESETPASSWORD) {
+            ResetPasswordDialog(
+                navController = navController,
+                title = activity.getString(R.string.titleResetPassword),
+                activity = activity
             )
         }
     }

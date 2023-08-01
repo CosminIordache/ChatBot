@@ -1,12 +1,9 @@
 package com.example.chatbot.utils
 
 import android.app.Activity
-import android.content.Context
 import android.widget.Toast
 import androidx.navigation.NavController
-import com.example.chatbot.R
 import com.example.chatbot.model.Graph
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
@@ -23,6 +20,16 @@ class AuthManager {
     }
 
     fun user() = auth.currentUser?.email.toString()
+
+    fun resetPassword(email: String, activity: Activity){
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener {
+                Toast.makeText(activity, "Please check your email.", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
 
 
     fun checkUser(auth: FirebaseAuth, navController: NavController, activity: Activity) {
