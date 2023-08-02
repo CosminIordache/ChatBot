@@ -1,13 +1,16 @@
 package com.example.chatbot.data
 
+import com.example.chatbot.model.Util
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiService {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.openai.com/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun create(): ChatGptApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Util.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
-    val openAIApi: OpenAIApi = retrofit.create(OpenAIApi::class.java)
+        return retrofit.create(ChatGptApi::class.java)
+    }
 }

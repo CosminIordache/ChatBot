@@ -1,42 +1,53 @@
 package com.example.chatbot.views.viewModel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatbot.data.ApiService
 import com.example.chatbot.data.OpenAIRequestBody
 import com.example.chatbot.model.Message
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
-import kotlin.math.pow
+import kotlinx.coroutines.withContext
 
 
 class ChatViewModel: ViewModel() {
 
-    val messages = mutableStateListOf<Message>()
+    private val api = ApiService.create()
+    private val _messages = MutableLiveData<List<Message>>(emptyList())
+    val messages: LiveData<List<Message>> = _messages
+    fun generateResponse(){
+        val currentMessages = _messages.value.orEmpty()
+        val requestBody = OpenAIRequestBody(messages = currentMessages)
 
-    fun sendMessage(text: String, isUser: Boolean = true) {
-        if (isUser) {
-            messages.add(Message(text, "user"))
-            viewModelScope.launch {
-                try {
-                    val response = ApiService.openAIApi.generateResponse(OpenAIRequestBody(messages = messages))
-                    val botMessage = response.choices.first().message
-                    messages.add(botMessage)
-                } catch (e: HttpException) {
-                    Log.e("API_ERROR", "HTTP error: ${e.message}")
-                } catch (e: IOException) {
-                    Log.e("API_ERROR", "Network error: ${e.message}")
-                } catch (e: Throwable) {
-                    Log.e("API_ERROR", "Unknown error: ${e.message}")
+        viewModelScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO){
+                    api.generateResponse(requestBody)
                 }
+
+                val replyMessage = response.choices.firstOrNull()?.message
+
+                if (!replyMessage.isNullOrBlank()) {
+                    val newMessages = currentMessages + Message(replyMessage, "ai")
+                    _messages.value = newMessages
+                }
+
+                Log.e("API_ERROR", "Mesages list ${messages.value}")
+            }catch (e: Exception){
+                Log.e("API_ERROR", "Error ${e.message}")
+                Log.e("API_ERROR", "Mesages list ${messages.value}")
             }
         }
+    }
+
+    fun addUserMessage(content: String) {
+        val currentMessages = _messages.value.orEmpty()
+        val newMessages = currentMessages + Message(content, "user")
+        _messages.value = newMessages
+
+        generateResponse()
     }
 }

@@ -3,7 +3,7 @@ package com.example.chatbot.utils
 import android.app.Activity
 import android.widget.Toast
 import androidx.navigation.NavController
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 
@@ -16,7 +16,7 @@ class AuthManager {
 
     fun signOut(navController: NavController) {
         auth.signOut()
-        navController.navigate(Graph.SIGNIN)
+        navController.navigate(Util.SIGNIN)
     }
 
     fun user() = auth.currentUser?.email.toString()
@@ -36,9 +36,9 @@ class AuthManager {
         val currentuser = auth.currentUser
         val admin = currentuser?.email.equals("admin@admin.com")
         if (currentuser != null && currentuser.isEmailVerified || admin) {
-            navController.navigate(Graph.MAIN){
-                popUpTo(Graph.SIGNIN) { inclusive = true}
-                popUpTo(Graph.SIGNUP) { inclusive = true}
+            navController.navigate(Util.MAIN){
+                popUpTo(Util.SIGNIN) { inclusive = true}
+                popUpTo(Util.SIGNUP) { inclusive = true}
             }
         } else {
             Toast.makeText(activity, "Email not verified", Toast.LENGTH_SHORT).show()

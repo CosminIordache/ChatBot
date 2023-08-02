@@ -9,7 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.chatbot.R
 import com.example.chatbot.views.views.authentification.SignInScreen
 import com.example.chatbot.views.views.authentification.SignUpScreen
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.example.chatbot.utils.AuthManager
 import com.example.chatbot.views.dialogs.EmailVerificationDialog
 import com.example.chatbot.views.dialogs.ResetPasswordDialog
@@ -29,22 +29,22 @@ fun NavController(activity: Activity) {
 
     NavHost(
         navController,
-        startDestination = if (authManager.isUserLoggedIn()) Graph.MAIN else Graph.SIGNIN
+        startDestination = if (authManager.isUserLoggedIn()) Util.MAIN else Util.SIGNIN
     ) {
-        composable(Graph.MAIN) {
+        composable(Util.MAIN) {
             Chatscreen(
                 navController = navController,
                 viewModel = chatViewModel
             )
         }
-        composable(Graph.SIGNIN) {
+        composable(Util.SIGNIN) {
             SignInScreen(
                 auth = auth,
                 navController = navController,
                 activity = activity
             )
         }
-        composable(Graph.SIGNUP) {
+        composable(Util.SIGNUP) {
             SignUpScreen(
                 navController = navController,
                 auth = auth,
@@ -52,7 +52,7 @@ fun NavController(activity: Activity) {
             )
         }
 
-        composable(Graph.DIALOGEMAILCONFIRMATION) {
+        composable(Util.DIALOGEMAILCONFIRMATION) {
             EmailVerificationDialog(
                 auth = auth,
                 navController = navController,
@@ -62,7 +62,7 @@ fun NavController(activity: Activity) {
             )
         }
 
-        composable(Graph.DIALOGRESETPASSWORD) {
+        composable(Util.DIALOGRESETPASSWORD) {
             ResetPasswordDialog(
                 navController = navController,
                 title = activity.getString(R.string.titleResetPassword),

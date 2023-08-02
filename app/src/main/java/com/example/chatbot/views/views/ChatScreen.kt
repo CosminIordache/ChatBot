@@ -3,6 +3,8 @@
 package com.example.chatbot.views.views
 
 import android.annotation.SuppressLint
+import android.os.Message
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -39,6 +41,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -77,14 +81,13 @@ fun Chatscreen(
                 reverseLayout = true
             ) {
 
-                items(viewModel.messages.reversed()) { message ->
-                    if (message.isUser) {
+                items(viewModel.messages.value!!.reversed()) { message ->
+                    if (message.role == "user") {
                         MessageCard(message.content, Alignment.Start)
                     } else {
                         MessageCard(message.content, Alignment.End)
                     }
                 }
-
             }
 
             Row(
@@ -102,7 +105,7 @@ fun Chatscreen(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send),
                     keyboardActions = KeyboardActions(onSend = {
-                        viewModel.sendMessage(userMessage)
+                        viewModel.addUserMessage(userMessage)
                         userMessage = ""
                     }),
                     shape = RoundedCornerShape(16.dp),
@@ -113,26 +116,18 @@ fun Chatscreen(
 
                 IconButton(
                     onClick = {
-                        viewModel.sendMessage(userMessage)
+                        viewModel.addUserMessage(userMessage)
                         userMessage = ""
                     },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(top = 10.dp)
                         .clip(RoundedCornerShape(25.dp))
-                        .background(
-                            if (isSystemInDarkTheme()) {
-                                MaterialTheme.colorScheme.onSecondary
-                            } else {
-                                MaterialTheme.colorScheme.onPrimary
-                            }
-                        ),
+                        .background(Color.Transparent),
                 ) {
                     Icon(Icons.Default.Send, contentDescription = "Send message")
                 }
-
             }
-
         }
     }
 }
@@ -172,17 +167,17 @@ fun TopBar(authManager: AuthManager, navController: NavController) {
 @Composable
 fun DropdownMenuItem(onClick: () -> Unit) {
     Row(Modifier.padding(horizontal = 15.dp, vertical = 5.dp)) {
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_person_off_24),
-            contentDescription = "Out"
-        )
-        Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = "Sign Out",
             style = TextStyle(
                 fontSize = 16.sp
             ),
             modifier = Modifier.clickable(onClick = onClick)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_person_off_24),
+            contentDescription = "Out"
         )
     }
 }
@@ -199,7 +194,12 @@ fun MessageCard(text: String, alignment: Alignment.Horizontal) {
         Text(
             text = text,
             modifier = Modifier.padding(16.dp),
-            fontSize = 16.sp
+            fontSize = 16.sp,
+            textAlign = when (alignment) {
+                Alignment.Start -> TextAlign.Start
+                Alignment.End -> TextAlign.End
+                else -> TextAlign.Start
+            }
         )
     }
 }

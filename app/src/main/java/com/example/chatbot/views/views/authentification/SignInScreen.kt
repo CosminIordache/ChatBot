@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
@@ -30,23 +32,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.chatbot.R
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.example.chatbot.utils.AuthManager
 import com.example.chatbot.utils.CloseAppInThisScreen
 import com.google.firebase.auth.FirebaseAuth
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Activity) {
     val context = LocalContext.current
@@ -60,6 +65,8 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
     }else{
         painterResource(id = R.drawable.baseline_visibility_off_24)
     }
+
+
 
     CloseAppInThisScreen()
 
@@ -96,7 +103,8 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
             )
         }
 
-        Column() {
+        Column {
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -107,7 +115,13 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                    .padding(top = 10.dp, start = 25.dp, end = 25.dp),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = KeyboardActions.Default.onNext
+                ),
             )
 
             OutlinedTextField(
@@ -131,7 +145,13 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(top = 5.dp, start = 25.dp, end = 25.dp, bottom = 20.dp)
+                    .padding(top = 5.dp, start = 25.dp, end = 25.dp, bottom = 20.dp),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = KeyboardActions.Default.onDone
+                )
             )
 
             Button(
@@ -159,7 +179,7 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Don't have account ?")
-                TextButton(onClick = { navController.navigate(Graph.SIGNUP)}) {
+                TextButton(onClick = { navController.navigate(Util.SIGNUP)}) {
                     Text(text = "Sing Up")
                 }
             }
@@ -169,7 +189,7 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TextButton(onClick = { navController.navigate(Graph.DIALOGRESETPASSWORD)}) {
+                TextButton(onClick = { navController.navigate(Util.DIALOGRESETPASSWORD)}) {
                     Text(text = "Don't remember your password ?")
                 }
             }

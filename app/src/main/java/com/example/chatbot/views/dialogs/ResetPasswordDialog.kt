@@ -23,14 +23,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.example.chatbot.utils.AuthManager
 
 
@@ -44,7 +43,7 @@ fun ResetPasswordDialog(
     val authManager = AuthManager()
     var resetEmail by rememberSaveable { mutableStateOf("") }
 
-    Dialog(onDismissRequest = { navController.navigate(Graph.SIGNIN) }) {
+    Dialog(onDismissRequest = { navController.navigate(Util.SIGNIN) }) {
         Surface(
             shadowElevation = 8.dp,
             shape = RoundedCornerShape(16.dp), tonalElevation = 8.dp
@@ -58,7 +57,7 @@ fun ResetPasswordDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    IconButton(onClick = { navController.navigate(Graph.SIGNIN) }) {
+                    IconButton(onClick = { navController.navigate(Util.SIGNIN) }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",

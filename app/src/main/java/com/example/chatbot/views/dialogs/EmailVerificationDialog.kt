@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.example.chatbot.utils.AuthManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -37,7 +37,7 @@ fun EmailVerificationDialog(
 ) {
     val authManager = AuthManager()
 
-    Dialog(onDismissRequest = { navController.navigate(Graph.SIGNUP) }) {
+    Dialog(onDismissRequest = { navController.navigate(Util.SIGNUP) }) {
         Surface(
             shadowElevation = 8.dp,
             shape = RoundedCornerShape(16.dp), tonalElevation = 8.dp
@@ -49,7 +49,7 @@ fun EmailVerificationDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                IconButton(onClick = { navController.navigate(Graph.SIGNUP) }) {
+                IconButton(onClick = { navController.navigate(Util.SIGNUP) }) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Close",

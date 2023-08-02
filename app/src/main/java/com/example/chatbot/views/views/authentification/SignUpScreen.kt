@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
@@ -31,12 +33,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.chatbot.R
-import com.example.chatbot.model.Graph
+import com.example.chatbot.model.Util
 import com.example.chatbot.utils.AuthManager
 import com.google.firebase.auth.FirebaseAuth
 
@@ -93,7 +96,13 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(top = 10.dp, start = 25.dp, end = 25.dp)
+                    .padding(top = 10.dp, start = 25.dp, end = 25.dp),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = KeyboardActions.Default.onNext
+                )
             )
 
             OutlinedTextField(
@@ -107,7 +116,13 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(top = 5.dp, start = 25.dp, end = 25.dp)
+                    .padding(top = 5.dp, start = 25.dp, end = 25.dp),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = KeyboardActions.Default.onNext
+                )
             )
 
             OutlinedTextField(
@@ -120,7 +135,13 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier
                     .fillMaxWidth(1f)
-                    .padding(top = 5.dp, start = 25.dp, end = 25.dp, bottom = 20.dp)
+                    .padding(top = 5.dp, start = 25.dp, end = 25.dp, bottom = 20.dp),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = KeyboardActions.Default.onDone
+                )
             )
 
             Button(
@@ -149,7 +170,7 @@ fun SignUpScreen(navController: NavHostController, auth: FirebaseAuth, activity:
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Remember your account ?")
-                TextButton(onClick = { navController.navigate(Graph.SIGNIN) }) {
+                TextButton(onClick = { navController.navigate(Util.SIGNIN) }) {
                     Text(text = "Sing In")
                 }
             }
@@ -173,7 +194,7 @@ private fun singUpUser(
                 if (task.isSuccessful) {
                     auth.currentUser?.reload()?.addOnCompleteListener { reloadTask ->
                         if (reloadTask.isSuccessful) {
-                            navController.navigate(Graph.DIALOGEMAILCONFIRMATION)
+                            navController.navigate(Util.DIALOGEMAILCONFIRMATION)
                             authManager.sendEmailVerification(auth, activity)
                         } else {
                             Toast.makeText(
