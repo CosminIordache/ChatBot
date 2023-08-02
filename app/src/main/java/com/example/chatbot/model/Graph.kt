@@ -6,5 +6,4 @@ object Graph {
     const val MAIN = "main"
     const val DIALOGEMAILCONFIRMATION = "emailConfirmation"
     const val DIALOGRESETPASSWORD = "resetPassword"
-    const val SETTINGS = "settings"
 }

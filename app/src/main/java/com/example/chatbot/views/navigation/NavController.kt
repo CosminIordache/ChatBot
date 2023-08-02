@@ -2,6 +2,7 @@ package com.example.chatbot.views.navigation
 
 import android.app.Activity
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,8 +13,8 @@ import com.example.chatbot.model.Graph
 import com.example.chatbot.utils.AuthManager
 import com.example.chatbot.views.dialogs.EmailVerificationDialog
 import com.example.chatbot.views.dialogs.ResetPasswordDialog
-import com.example.chatbot.views.views.ChatView
-import com.example.chatbot.views.views.SettingsView
+import com.example.chatbot.views.viewModel.ChatViewModel
+import com.example.chatbot.views.views.Chatscreen
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -24,14 +25,16 @@ fun NavController(activity: Activity) {
     //auth
     val auth = Firebase.auth
     val authManager = AuthManager()
+    val chatViewModel = viewModel<ChatViewModel>()
 
     NavHost(
         navController,
         startDestination = if (authManager.isUserLoggedIn()) Graph.MAIN else Graph.SIGNIN
     ) {
         composable(Graph.MAIN) {
-            ChatView(
-                navController = navController
+            Chatscreen(
+                navController = navController,
+                viewModel = chatViewModel
             )
         }
         composable(Graph.SIGNIN) {
@@ -47,9 +50,6 @@ fun NavController(activity: Activity) {
                 auth = auth,
                 activity = activity
             )
-        }
-        composable(Graph.SETTINGS) {
-            SettingsView(navController = navController)
         }
 
         composable(Graph.DIALOGEMAILCONFIRMATION) {

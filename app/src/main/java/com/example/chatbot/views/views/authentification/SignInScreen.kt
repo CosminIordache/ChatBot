@@ -174,24 +174,24 @@ fun SignInScreen(auth: FirebaseAuth, navController: NavController, activity: Act
                 }
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.google),
-                        contentDescription = "Google logo"
-                    )
-                }
-                IconButton(onClick = { }) {
-                    Image(
-                        painter = painterResource(id = R.drawable.facebook),
-                        contentDescription = "facebook logo"
-                    )
-                }
-            }
+//            Row(
+//                modifier = Modifier.fillMaxWidth(),
+//                Arrangement.Center,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                IconButton(onClick = { }) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.google),
+//                        contentDescription = "Google logo"
+//                    )
+//                }
+//                IconButton(onClick = { }) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.facebook),
+//                        contentDescription = "facebook logo"
+//                    )
+//                }
+//            }
 
         }
     }
