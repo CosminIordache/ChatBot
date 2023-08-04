@@ -116,8 +116,10 @@ fun Chatscreen(
 
                 IconButton(
                     onClick = {
-                        viewModel.addUserMessage(userMessage)
-                        userMessage = ""
+                        if (userMessage.isNotEmpty()) {
+                            viewModel.addUserMessage(userMessage)
+                            userMessage = ""
+                        }
                     },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
