@@ -1,7 +1,9 @@
 package com.example.chatbot.views.viewModel
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,14 +19,21 @@ import kotlinx.coroutines.withContext
 class ChatViewModel: ViewModel() {
 
     private val api = ApiService.create()
-    private var _messages : MutableLiveData<List<Message>> = MutableLiveData(emptyList())
-    var messages: LiveData<List<Message>> = _messages
+    private var _messages = mutableStateListOf<Message>()
+    var messages: List<Message> = _messages
 
     private val _errorState = mutableStateOf<String?>(null)
     val errorState = _errorState
 
+    init {
+        _messages.addAll(listOf(
+            Message("Hola", "user"),
+            Message("Hola, ¿cómo puedo ayudarte?", "ai")
+        ))
+    }
+
     fun generateResponse(){
-        val currentMessages = _messages.value.orEmpty()
+        val currentMessages = _messages.toList()
         val requestBody = OpenAIRequestBody(messages = currentMessages)
 
         viewModelScope.launch {
@@ -37,15 +46,15 @@ class ChatViewModel: ViewModel() {
 
                 if (!replyMessage.isNullOrBlank()) {
                     val newMessages = currentMessages + Message(replyMessage, "ai")
-                    _messages.value = newMessages
+                    _messages.addAll(newMessages)
                 }
 
-                Log.e("API_ERROR", "Mesages list ${messages.value}")
+                Log.e("API_ERROR", "Mesages list $messages")
             }catch (e: Exception){
                 Log.e("API_ERROR", "Error ${e.message}")
-                Log.e("API_ERROR", "Mesages list ${messages.value}")
+                Log.e("API_ERROR", "Mesages list $messages")
 
-                _errorState.value = "Api error ${e.message}"
+                _errorState.value = "${e.message}"
             }
         }
     }
@@ -55,14 +64,13 @@ class ChatViewModel: ViewModel() {
     }
 
     fun addUserMessage(content: String) {
-        val currentMessages = _messages.value.orEmpty()
-        val newMessages = currentMessages + Message(content, "user")
-        _messages.value = newMessages
+        val newMessages = Message(content, "user")
+        _messages.add(newMessages)
 
         generateResponse()
     }
 
     fun clearMessages(){
-        _messages.value = emptyList()
+        _messages.clear()
     }
 }
