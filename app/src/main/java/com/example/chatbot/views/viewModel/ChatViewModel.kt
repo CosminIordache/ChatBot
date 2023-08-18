@@ -1,11 +1,7 @@
 package com.example.chatbot.views.viewModel
 
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.material3.AlertDialog
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +10,6 @@ import com.example.chatbot.data.ApiService
 import com.example.chatbot.data.OpenAIRequestBody
 import com.example.chatbot.model.Message
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -55,7 +50,7 @@ class ChatViewModel: ViewModel() {
         }
     }
 
-    fun clearErrorState() {
+    fun hideErrorState() {
         _errorState.value = null
     }
 

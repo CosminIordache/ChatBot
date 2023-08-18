@@ -3,11 +3,8 @@
 package com.example.chatbot.views.views
 
 import android.annotation.SuppressLint
-import android.os.Message
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +15,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
@@ -46,7 +41,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,11 +78,11 @@ fun Chatscreen(
 
             if (errorState != null){
                 AlertDialog(
-                    onDismissRequest = { viewModel.clearErrorState() },
+                    onDismissRequest = { viewModel.hideErrorState() },
                     title = { Text(text = "API ERROR", fontWeight = FontWeight.Bold) },
                     text = { Text(text = errorState) },
                     confirmButton = {
-                        Button(onClick = { viewModel.clearErrorState() }) {
+                        Button(onClick = { viewModel.hideErrorState() }) {
                             Text(text = "Aceptar")
                         }
                     },
