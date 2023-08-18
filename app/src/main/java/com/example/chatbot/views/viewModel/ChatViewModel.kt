@@ -27,8 +27,7 @@ class ChatViewModel: ViewModel() {
 
     init {
         _messages.addAll(listOf(
-            Message("Hola", "user"),
-            Message("Hola, ¿cómo puedo ayudarte?", "ai")
+            Message("Hello, how can I assist you?", "ai")
         ))
     }
 
@@ -49,10 +48,10 @@ class ChatViewModel: ViewModel() {
                     _messages.addAll(newMessages)
                 }
 
-                Log.e("API_ERROR", "Mesages list $messages")
+                Log.e("API_ERROR", "Mesages list ${messages.toList()}")
             }catch (e: Exception){
                 Log.e("API_ERROR", "Error ${e.message}")
-                Log.e("API_ERROR", "Mesages list $messages")
+                Log.e("API_ERROR", "Mesages list ${messages.toList()}")
 
                 _errorState.value = "${e.message}"
             }

@@ -3,6 +3,7 @@
 package com.example.chatbot.views.views
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -218,23 +220,21 @@ fun DropdownMenuItem(onClick: () -> Unit) {
 
 @Composable
 fun MessageCard(text: String, alignment: Alignment.Horizontal) {
-    Surface(
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 4.dp,
+
+    Card(
         modifier = Modifier
             .padding(vertical = 4.dp)
             .wrapContentWidth(alignment)
     ) {
-        Text(
-            text = text,
+        Row(
             modifier = Modifier.padding(16.dp),
-            fontSize = 16.sp,
-            textAlign = when (alignment) {
-                Alignment.Start -> TextAlign.Start
-                Alignment.End -> TextAlign.End
-                else -> TextAlign.Start
-            }
-        )
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = text,
+                fontSize = 16.sp
+            )
+        }
     }
 }
 
