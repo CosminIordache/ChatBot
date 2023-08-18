@@ -18,12 +18,17 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -48,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -69,18 +75,33 @@ fun Chatscreen(
     CloseAppInThisScreen()
 
     val authManager = AuthManager()
+    val errorState = viewModel.errorState.value
 
     Scaffold(
         topBar = { TopBar(authManager = authManager, navController = navController) }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
+
+            if (errorState != null){
+                AlertDialog(
+                    onDismissRequest = { viewModel.clearErrorState() },
+                    title = { Text(text = "API ERROR", fontWeight = FontWeight.Bold) },
+                    text = { Text(text = errorState) },
+                    confirmButton = {
+                        Button(onClick = { viewModel.clearErrorState() }) {
+                            Text(text = "Aceptar")
+                        }
+                    },
+                    shape = RoundedCornerShape(16.dp)
+                )
+            }
+
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .padding(16.dp),
                 reverseLayout = true
             ) {
-
                 items(viewModel.messages.value!!.reversed()) { message ->
                     if (message.role == "user") {
                         MessageCard(message.content, Alignment.Start)
@@ -97,6 +118,19 @@ fun Chatscreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 var userMessage by rememberSaveable { mutableStateOf("") }
+
+                IconButton(
+                    onClick = {
+                        viewModel.clearMessages()
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(top = 10.dp)
+                        .clip(RoundedCornerShape(25.dp))
+                        .background(Color.Transparent),
+                ) {
+                    Icon(Icons.Default.Delete, contentDescription = "Clear Conversation")
+                }
 
                 OutlinedTextField(
                     value = userMessage,
@@ -131,8 +165,10 @@ fun Chatscreen(
                 }
             }
         }
+
     }
 }
+
 
 @Composable
 fun TopBar(authManager: AuthManager, navController: NavController) {

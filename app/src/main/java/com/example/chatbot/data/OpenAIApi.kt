@@ -6,7 +6,7 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface ChatGptApi {
-    @Headers("Content-Type: application/json", "Authorization: Bearer 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")
+    @Headers("Content-Type: application/json", "Authorization: Bearer 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")
     @POST("v1/chat/completions")
     suspend fun generateResponse(@Body requestBody: OpenAIRequestBody): OpenAIResponse
 }

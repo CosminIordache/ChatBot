@@ -1,6 +1,11 @@
 package com.example.chatbot.views.viewModel
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.material3.AlertDialog
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +14,7 @@ import com.example.chatbot.data.ApiService
 import com.example.chatbot.data.OpenAIRequestBody
 import com.example.chatbot.model.Message
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -16,8 +22,12 @@ import kotlinx.coroutines.withContext
 class ChatViewModel: ViewModel() {
 
     private val api = ApiService.create()
-    private val _messages = MutableLiveData<List<Message>>(emptyList())
-    val messages: LiveData<List<Message>> = _messages
+    private var _messages : MutableLiveData<List<Message>> = MutableLiveData(emptyList())
+    var messages: LiveData<List<Message>> = _messages
+
+    private val _errorState = mutableStateOf<String?>(null)
+    val errorState = _errorState
+
     fun generateResponse(){
         val currentMessages = _messages.value.orEmpty()
         val requestBody = OpenAIRequestBody(messages = currentMessages)
@@ -39,8 +49,14 @@ class ChatViewModel: ViewModel() {
             }catch (e: Exception){
                 Log.e("API_ERROR", "Error ${e.message}")
                 Log.e("API_ERROR", "Mesages list ${messages.value}")
+
+                _errorState.value = "Api error ${e.message}"
             }
         }
+    }
+
+    fun clearErrorState() {
+        _errorState.value = null
     }
 
     fun addUserMessage(content: String) {
@@ -49,5 +65,9 @@ class ChatViewModel: ViewModel() {
         _messages.value = newMessages
 
         generateResponse()
+    }
+
+    fun clearMessages(){
+        _messages.value = emptyList()
     }
 }
