@@ -1,6 +1,5 @@
 package com.example.chatbot.data
 
-import com.example.chatbot.model.Message
 import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -12,18 +11,22 @@ interface ChatGptApi {
 }
 
 data class OpenAIRequestBody(
-    val model: String = "gpt-3.5-turbo-0613",
-    val messages: List<Message>
+    val model: String = "gpt-3.5-turbo-16k-0613",
+    val messages: List<Message>,
+    val max_tokens: Int = 50,
+    val n: Int = 1,
+    val temperature: Double = 1.0
 )
 
 data class OpenAIResponse(
-    val id: String,
-    val object_: String,
-    val choices: List<Choice>
+    val choices: List<MessageResponse>
 )
 
-data class Choice(
-    val message: String,
-    val finish_reason: String,
-    val index: Int
+data class Message(
+    val content: String,
+    val role: String
+)
+
+data class MessageResponse(
+    val message: Message
 )

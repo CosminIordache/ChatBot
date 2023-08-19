@@ -3,73 +3,40 @@ package com.example.chatbot.views.viewModel
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatbot.data.ApiService
+import com.example.chatbot.data.Message
 import com.example.chatbot.data.OpenAIRequestBody
-import com.example.chatbot.model.Message
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
-class ChatViewModel: ViewModel() {
+class ChatViewModel : ViewModel() {
 
-    private val api = ApiService.create()
-    private var _messages = mutableStateListOf<Message>()
-    var messages: List<Message> = _messages
+    var messages = mutableStateListOf<Message>()
+    val errorState = mutableStateOf<String?>(null)
 
-    private val _errorState = mutableStateOf<String?>(null)
-    val errorState = _errorState
-
-    init {
-        _messages.addAll(listOf(
-            Message("Hello, how can I assist you?", "ai")
-        ))
-    }
-
-    fun generateResponse(){
-        val currentMessages = _messages.toList()
-        val requestBody = OpenAIRequestBody(messages = currentMessages)
+    fun sendMessage(text: String) {
+        val userMessage = Message(text, "user")
+        messages.add(userMessage)
 
         viewModelScope.launch {
             try {
-                val response = withContext(Dispatchers.IO){
-                    api.generateResponse(requestBody)
-                }
-
-                val replyMessage = response.choices.firstOrNull()?.message
-
-                if (!replyMessage.isNullOrBlank()) {
-                    val newMessages = currentMessages + Message(replyMessage, "ai")
-                    _messages.addAll(newMessages)
-                }
-
-                Log.e("API_ERROR", "Mesages list ${messages.toList()}")
-            }catch (e: Exception){
-                Log.e("API_ERROR", "Error ${e.message}")
-                Log.e("API_ERROR", "Mesages list ${messages.toList()}")
-
-                _errorState.value = "${e.message}"
+                val response = ApiService.openAIApi.generateResponse(OpenAIRequestBody(messages = messages))
+                val aiResponseMessage = response.choices.map { it.message }.first()
+                messages.add(aiResponseMessage)
+            } catch (e: Exception) {
+                errorState.value = "Error: ${e.message}"
+                Log.e("test", "${messages.toList()}")
             }
         }
     }
 
     fun hideErrorState() {
-        _errorState.value = null
+        errorState.value = null
     }
 
-    fun addUserMessage(content: String) {
-        val newMessages = Message(content, "user")
-        _messages.add(newMessages)
-
-        generateResponse()
-    }
-
-    fun clearMessages(){
-        _messages.clear()
+    fun clearMessages() {
+        messages.clear()
     }
 }

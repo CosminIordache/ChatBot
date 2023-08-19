@@ -104,8 +104,11 @@ fun Chatscreen(
                 reverseLayout = true
             ) {
                 items(viewModel.messages.reversed()) { message ->
-                    val alignment = if (message.role == "user") Alignment.Start else Alignment.End
-                    MessageCard(message.content, alignment)
+                    if (message.role == "user"){
+                        MessageCard(message.content, Alignment.End)
+                    }else{
+                        MessageCard(message.content, Alignment.Start)
+                    }
                 }
             }
 
@@ -137,7 +140,7 @@ fun Chatscreen(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Send),
                     keyboardActions = KeyboardActions(onSend = {
-                        viewModel.addUserMessage(userMessage)
+                        viewModel.sendMessage(userMessage)
                         userMessage = ""
                     }),
                     shape = RoundedCornerShape(16.dp),
@@ -149,7 +152,7 @@ fun Chatscreen(
                 IconButton(
                     onClick = {
                         if (userMessage.isNotEmpty()) {
-                            viewModel.addUserMessage(userMessage)
+                            viewModel.sendMessage(userMessage)
                             userMessage = ""
                         }
                     },
